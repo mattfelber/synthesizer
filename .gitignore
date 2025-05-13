@@ -1,0 +1,37 @@
+# Ignore compiled binaries
+*.exe
+*.out
+*.app
+*.dll
+*.so
+*.dylib
+
+# Ignore Visual Studio files
+.vs/
+*.user
+*.userosscache
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.VC.opendb
+
+# Ignore build directories
+Debug/
+Release/
+x64/
+x86/
+build/
+bin/
+obj/
+
+# Ignore other common files
+*.log
+*.tlog
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.ipch
+.DS_Store
+Thumbs.db
