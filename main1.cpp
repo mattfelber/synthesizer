@@ -141,16 +141,14 @@ double MakeNoise(double dTime)
 
     double dOutput = envelope.GetAmplitude(dTime) * 
     ( 
-        //+ osc(dFrequencyOutput * 0.5, dTime, 0)   //sine
-        //+ osc(dFrequencyOutput * 0.5, dTime, 1)   //square
+        + osc(dFrequencyOutput * 0.5, dTime, 0)   //sine
+        + osc(dFrequencyOutput * 0.5, dTime, 1)   //square
         //+ osc(dFrequencyOutput * 0.5, dTime, 2)   //sawtooth
         //+ osc(dFrequencyOutput * 0.5, dTime, 3)   //triangle
         //+ osc(dFrequencyOutput * 0.5, dTime, 4)   //ramp
-        //+ osc(dFrequencyOutput * 0.5, dTime, 5)   //pulse
+        //osc(dFrequencyOutput * 0.5, dTime, 5)   //pulse
         //+ osc(dFrequencyOutput * 0.5, dTime, 6)   //noise
-        + osc(dFrequencyOutput * 0.5, dTime, 7)     //white noise
-        
-       
+        //+ osc(dFrequencyOutput * 0.5, dTime, 7)     //white noise
     
     ); 
     
@@ -183,7 +181,8 @@ int main()
     // links the noise function with sound machine class
     sound.SetUserFunction(MakeNoise);
 
-    double dOctaveBaseFrequency = 55.0; // First note in the octave
+    // ================================================================== BASE FREQUENCY
+    double dOctaveBaseFrequency = 110.0; // First note in the octave A2s
     double d12thRootOf2 = pow(2.0, 1.0 / 12.0); 
 
     int nCurrentKey = -1; // Add this line before your while loop
