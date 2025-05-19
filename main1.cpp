@@ -199,31 +199,54 @@ sEnvelopeADSR envelope; // Declare the envelope object
 
 double MakeNoise(double dTime) 
 {
-    // dTime is the time in seconds since the last call to this function
-    // dFrequencyOutput is the frequency of the sound wave in hertz
-    // dOutput is the amplitude of the sound wave
-    // The output is a type of wave with a frequency of dFrequencyOutput hertz
-    // The amplitude is scaled to be between -1.0 and 1.0
-    // The output is multiplied by 0.4 to reduce the volume
+    // Try these different combinations by uncommenting them:
 
-    // 0 = sine, 1 = square, 2 = sawtooth, 3 = triangle, 4 = ramp, 5 = pulse, 6 = noise
+    // 1. Rich pad sound with multiple oscillators
     double dOutput = envelope.GetAmplitude(dTime) * 
     (   
-        + 1.0 * osc(dFrequencyOutput, dTime, OSC_SINE, 5.0, 0.01)
-        //+ osc(dFrequencyOutput * 0.5, dTime, 0)   //sine
-        //+ osc(dFrequencyOutput * 0.5, dTime, 1)   //square
-        //+ osc(dFrequencyOutput * 0.5, dTime, 2)   //sawtooth
-        //+ osc(dFrequencyOutput * 0.5, dTime, 3)   //triangle
-        //+ osc(dFrequencyOutput * 0.5, dTime, 4)   //ramp
-        //osc(dFrequencyOutput * 0.5, dTime, 5)   //pulse
-        //+ osc(dFrequencyOutput * 0.5, dTime, 6)   //noise
-        //+ osc(dFrequencyOutput * 0.5, dTime, 7)     //white noise
-    
+        + 1.0 * osc(dFrequencyOutput, dTime, OSC_SINE, 2.0, 0.01)      // Main tone
+        + 0.5 * osc(dFrequencyOutput * 0.5, dTime, OSC_TRIANGLE, 1.5, 0.02)  // Sub oscillator
+        + 0.25 * osc(dFrequencyOutput * 2.0, dTime, OSC_SAW_ANA, 3.0, 0.005) // High harmonics
     ); 
+
+    // 2. Retro game sound
+    /*
+    double dOutput = envelope.GetAmplitude(dTime) * 
+    (   
+        + 1.0 * osc(dFrequencyOutput, dTime, OSC_SQUARE, 0.0, 0.0)     // Main tone
+        + 0.5 * osc(dFrequencyOutput * 1.5, dTime, OSC_PULSE, 0.0, 0.0) // High harmony
+    ); 
+    */
+
+    // 3. Bass sound
+    /*
+    double dOutput = envelope.GetAmplitude(dTime) * 
+    (   
+        + 1.0 * osc(dFrequencyOutput, dTime, OSC_SAW_ANA, 0.0, 0.0)    // Main tone
+        + 0.5 * osc(dFrequencyOutput * 0.5, dTime, OSC_SINE, 0.0, 0.0)  // Sub bass
+    ); 
+    */
+
+    // 4. Lead sound with vibrato
+    /*
+    double dOutput = envelope.GetAmplitude(dTime) * 
+    (   
+        + 1.0 * osc(dFrequencyOutput, dTime, OSC_SAW_ANA, 5.0, 0.02)   // Main tone with vibrato
+        + 0.25 * osc(dFrequencyOutput * 2.0, dTime, OSC_SINE, 5.0, 0.02) // High harmony
+    ); 
+    */
+
+    // 5. Ambient pad
+    /*
+    double dOutput = envelope.GetAmplitude(dTime) * 
+    (   
+        + 1.0 * osc(dFrequencyOutput, dTime, OSC_SINE, 0.5, 0.01)      // Main tone
+        + 0.5 * osc(dFrequencyOutput * 1.5, dTime, OSC_SINE, 0.7, 0.01) // Harmony
+        + 0.25 * osc(dFrequencyOutput * 2.0, dTime, OSC_SINE, 0.3, 0.01) // High harmony
+    ); 
+    */
     
     return dOutput * 0.4; // MASTER VOLUME
-    
-   
 }
 
 int main() 
