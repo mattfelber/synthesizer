@@ -207,32 +207,33 @@ double MakeNoise(double dTime)
     // (   
     //     + 1.0 * osc(dFrequencyOutput, dTime, OSC_SINE, 2.0, 0.01)      // Main tone
     //     + 0.5 * osc(dFrequencyOutput * 0.5, dTime, OSC_TRIANGLE, 1.5, 0.02)  // Sub oscillator
-    //     + 0.25 * osc(dFrequencyOutput * 2.0, dTime, OSC_SAW_ANA, 3.0, 0.005) // High harmonics
+    //     + 0.25 * osc(dFrequencyOutput * 2.0, dTime, OSC_SAWTOOTH, 3.0, 0.005) // High harmonics
     // ); 
 
     // 2. Retro game sound
     
-    double dOutput = envelope.GetAmplitude(dTime) * 
-    (   
-        + 1.0 * osc(dFrequencyOutput, dTime, OSC_SQUARE, 0.0, 0.0)     // Main tone
-        + 0.5 * osc(dFrequencyOutput * 1.5, dTime, OSC_PULSE, 0.0, 0.0) // High harmony
-    ); 
+    // double dOutput = envelope.GetAmplitude(dTime) * 
+    // (   
+    //     + 1.0 * osc(dFrequencyOutput, dTime, OSC_SQUARE, 0.0, 0.0)     // Main tone
+    //     + 0.5 * osc(dFrequencyOutput * 1.5, dTime, OSC_PULSE, 0.0, 0.0) // High harmony
+    // ); 
     
 
     // 3. Bass sound
-    /*
-    double dOutput = envelope.GetAmplitude(dTime) * 
-    (   
-        + 1.0 * osc(dFrequencyOutput, dTime, OSC_SAW_ANA, 0.0, 0.0)    // Main tone
-        + 0.5 * osc(dFrequencyOutput * 0.5, dTime, OSC_SINE, 0.0, 0.0)  // Sub bass
-    ); 
-    */
+    
+    // double dOutput = envelope.GetAmplitude(dTime) * 
+    // (   
+    //     + 1.0 * osc(dFrequencyOutput, dTime, OSC_TRIANGLE, 0.0, 0.0)    // Main tone
+    //     + 1.0 * osc(dFrequencyOutput * 1.5, dTime, OSC_TRIANGLE, 0.0, 0.0)
+    //     + 0.5 * osc(dFrequencyOutput * 0.5, dTime, OSC_SINE, 0.0, 0.0)  // Sub bass
+    // ); 
+    
 
     // 4. Lead sound with vibrato
     /*
     double dOutput = envelope.GetAmplitude(dTime) * 
     (   
-        + 1.0 * osc(dFrequencyOutput, dTime, OSC_SAW_ANA, 5.0, 0.02)   // Main tone with vibrato
+        + 1.0 * osc(dFrequencyOutput, dTime, OSC_SAWTOOTH, 5.0, 0.02)   // Main tone with vibrato
         + 0.25 * osc(dFrequencyOutput * 2.0, dTime, OSC_SINE, 5.0, 0.02) // High harmony
     ); 
     */
@@ -246,6 +247,17 @@ double MakeNoise(double dTime)
         + 0.25 * osc(dFrequencyOutput * 2.0, dTime, OSC_SINE, 0.3, 0.01) // High harmony
     ); 
     */
+
+    // 6. Hip Hop Bell
+    
+    double dOutput = envelope.GetAmplitude(dTime) * 
+    (   
+        + 1.0 * osc(dFrequencyOutput, dTime, OSC_TRIANGLE, 0.0, 0.0)     // Main tone
+        + 0.5 * osc(dFrequencyOutput * 1.5, dTime, OSC_TRIANGLE, 0.0, 0.0) // Perfect fifth
+        + 0.25 * osc(dFrequencyOutput * 2.0, dTime, OSC_TRIANGLE, 0.0, 0.0) // Octave up
+        + 0.125 * osc(dFrequencyOutput * 3.0, dTime, OSC_TRIANGLE, 0.0, 0.0) // Octave + fifth
+    ); 
+    
     
     return dOutput * 0.4; // MASTER VOLUME
 }
@@ -275,7 +287,7 @@ int main()
     sound.SetUserFunction(MakeNoise);
 
     // ====================== BASE-FREQUENCY =====================================
-    double dOctaveBaseFrequency = 55; // First note in the octave (A2 - 110Hertz)
+    double dOctaveBaseFrequency = 110; // First note in the octave (A2 - 110Hertz)
     double d12thRootOf2 = pow(2.0, 1.0 / 12.0); 
 
     int nCurrentKey = -1; // Add this line before your while loop
@@ -293,6 +305,21 @@ int main()
                     dFrequencyOutput = dOctaveBaseFrequency * pow(d12thRootOf2, k);
                     envelope.NoteOn(sound.GetTime());
                     nCurrentKey = k;
+
+                    // Display sound information
+                    cout << "\n=== Sound Information ===" << endl;
+                    cout << "Base Frequency: " << dFrequencyOutput << " Hz" << endl;
+                    cout << "Note Components:" << endl;
+                    cout << "1. Main tone: " << dFrequencyOutput << " Hz (Triangle)" << endl;
+                    cout << "2. Perfect fifth: " << (dFrequencyOutput * 1.5) << " Hz (Triangle)" << endl;
+                    cout << "3. Octave up: " << (dFrequencyOutput * 2.0) << " Hz (Triangle)" << endl;
+                    cout << "4. Octave + fifth: " << (dFrequencyOutput * 3.0) << " Hz (Triangle)" << endl;
+                    cout << "Envelope Settings:" << endl;
+                    cout << "- Attack: " << envelope.dAttackTime * 1000 << " ms" << endl;
+                    cout << "- Decay: " << envelope.dDecayTime * 1000 << " ms" << endl;
+                    cout << "- Sustain: " << envelope.dSustainAmplitude * 100 << "%" << endl;
+                    cout << "- Release: " << envelope.dReleaseTime * 1000 << " ms" << endl;
+                    cout << "=====================" << endl;
                 }
                 bKeyPressed = true;
             }
@@ -303,6 +330,7 @@ int main()
             if (nCurrentKey != -1)
             {
                 envelope.NoteOff(sound.GetTime());
+                cout << "\nNote Released" << endl;
                 nCurrentKey = -1;
             }
         }
