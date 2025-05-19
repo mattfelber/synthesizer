@@ -15,12 +15,13 @@ double w(double dHertz)
 }
 
 // Define constants for different oscillator types to make code more readable
-#define OSC_SINE 0      // Sine wave - smooth, pure tone
-#define OSC_SQUARE 1    // Square wave - harsh, buzzy sound with odd harmonics
-#define OSC_TRIANGLE 2  // Triangle wave - smoother than square, still with harmonics
-#define OSC_SAW_ANA 3   // Analog-style sawtooth - rich in harmonics, bright sound
-#define OSC_SAW_DIG 4   // Digital sawtooth/ramp - similar to analog saw but implemented differently
-#define OSC_NOISE 5     // Noise - random values, useful for percussion or effects
+#define OSC_SINE 0         // Sine wave - smooth, pure tone
+#define OSC_SQUARE 1
+#define OSC_SAWTOOTH 2    // Square wave - harsh, buzzy sound with odd harmonics
+#define OSC_TRIANGLE 3    // Triangle wave - smoother than square, still with harmonics
+#define OSC_RAMP 4        // 
+#define OSC_PULSE 5      // Digital sawtooth/ramp - similar to analog saw but implemented differently
+#define OSC_NOISE 6      // Noise - random values, useful for percussion or effects
 
 /**
  * Oscillator function that generates different waveforms
@@ -202,21 +203,21 @@ double MakeNoise(double dTime)
     // Try these different combinations by uncommenting them:
 
     // 1. Rich pad sound with multiple oscillators
-    double dOutput = envelope.GetAmplitude(dTime) * 
-    (   
-        + 1.0 * osc(dFrequencyOutput, dTime, OSC_SINE, 2.0, 0.01)      // Main tone
-        + 0.5 * osc(dFrequencyOutput * 0.5, dTime, OSC_TRIANGLE, 1.5, 0.02)  // Sub oscillator
-        + 0.25 * osc(dFrequencyOutput * 2.0, dTime, OSC_SAW_ANA, 3.0, 0.005) // High harmonics
-    ); 
+    // double dOutput = envelope.GetAmplitude(dTime) * 
+    // (   
+    //     + 1.0 * osc(dFrequencyOutput, dTime, OSC_SINE, 2.0, 0.01)      // Main tone
+    //     + 0.5 * osc(dFrequencyOutput * 0.5, dTime, OSC_TRIANGLE, 1.5, 0.02)  // Sub oscillator
+    //     + 0.25 * osc(dFrequencyOutput * 2.0, dTime, OSC_SAW_ANA, 3.0, 0.005) // High harmonics
+    // ); 
 
     // 2. Retro game sound
-    /*
+    
     double dOutput = envelope.GetAmplitude(dTime) * 
     (   
         + 1.0 * osc(dFrequencyOutput, dTime, OSC_SQUARE, 0.0, 0.0)     // Main tone
         + 0.5 * osc(dFrequencyOutput * 1.5, dTime, OSC_PULSE, 0.0, 0.0) // High harmony
     ); 
-    */
+    
 
     // 3. Bass sound
     /*
@@ -274,7 +275,7 @@ int main()
     sound.SetUserFunction(MakeNoise);
 
     // ====================== BASE-FREQUENCY =====================================
-    double dOctaveBaseFrequency = 110; // First note in the octave (A2 - 110Hertz)
+    double dOctaveBaseFrequency = 55; // First note in the octave (A2 - 110Hertz)
     double d12thRootOf2 = pow(2.0, 1.0 / 12.0); 
 
     int nCurrentKey = -1; // Add this line before your while loop
